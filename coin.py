@@ -24,6 +24,12 @@ class Coin:
             return True
         return False
     
+    def __str__(self):
+        return (str)(self.get_value)
+    
+    def __repr__(self):
+        return (str)(self.get_value)
+    
 
 class TestCoin(unittest.TestCase):
     def test_returnValue(self) -> None:
@@ -35,4 +41,10 @@ if __name__ == '__main__':
     unittest.main()
 else:
     print('Coin imported succenfully')
+
+
+# In[ ]:
+
+
+
 

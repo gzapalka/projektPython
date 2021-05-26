@@ -21,6 +21,7 @@ class InvalidArgument(Exception):
     def __init__(self, tk, window):
         self.mess = "Ilość monet musi być dodatnia i całkowita"
         popup_window(tk, window, self.mess)
+        self.tm.clearList()
         super().__init__(self.mess)
         
 
@@ -34,4 +35,25 @@ class CannotChange(Exception):
         self.mess = "Nie można wydać reszty. Tylko odliczona kwota"
         popup_window(tk, window, self.mess)
         super().__init__(self.mess)
+
+
+# In[ ]:
+
+
+class NotEnoughMoney(Exception):
+    """Nie wystarczająca ilość pieniędzy"""
+    def __init__(self, tk, window):
+        self.mess = "Nie wystarczająca ilość pieniędzy"
+        popup_window(tk, window, self.mess)
+        super().__init__(self.mess)
+
+
+# In[ ]:
+
+
+class NoChangeNeeded(Exception):
+    """Informacja o braku reszty do wypłacenia"""
+    def __init__(self, tk, window):
+        self.mess = "Brak reszty. Dziękujemy za zakupy"
+        popup_window(tk, window, self.mess)
 
