@@ -9,9 +9,9 @@ import unittest
 
 class Coin:
     """Klasa rezprezentująca monety"""
-    def __init__(self, value: float):
+    def __init__(self, value: Decimal):
         """Tworzy nowy obiekt typu Coin"""
-        self._value = Decimal(round(value, 2))
+        self._value = value
         
     @property
     def get_value(self) -> Decimal:
@@ -40,7 +40,7 @@ class TestCoin(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 else:
-    print('Coin imported succenfully')
+    print('Coin imported succesfully')
 
 
 # In[ ]:

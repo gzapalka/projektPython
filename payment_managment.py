@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
+# In[1]:
 
 
 from  coin import *
@@ -13,8 +13,8 @@ class Payment_Management:
     
     def __init__(self) -> None:
         """Zwraca obiekt typu Payment_Management"""
-#         self.expectedValue=[0.01,0.02, 0.05, 0.1,0.2,0.5,1,2,5,10,20,50]
-        self.expectedValue=[50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
+        expectedValue = [50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
+        self.expectedValue= [Decimal(expectedValue[i]).quantize(Decimal('0.00')) for i in range(len(expectedValue))]
         self.lista=np.array([])
         self.credit =0
         self.payment = 0
@@ -33,19 +33,19 @@ class Payment_Management:
         if coin in self.lista:
             self.lista = np.delete(self.lista, np.argwhere(self.lista == coin)[0])
         else:
-                return False
+            return False
             
-    def change(self, amount: float) -> np.array or bool:
+    def change(self, amount: Decimal) -> np.array or bool:
         """Wydaje resztę jeżeli to możliwe"""
-        amount = Decimal(round(amount,2))
-        print("Amount: ",amount)
         self.lista=np.sort(self.lista)[::-1]
         temp = 0
         temp_list = np.array([])
         i=0
-        print(self.lista)
+        print("Muszę wydać: ", amount)
+        print("Mam do dyspozycji: ", self.lista)
         while amount > temp and i < len(self.lista):
             if temp + self.lista[i].get_value <= amount:
+                print("Mogę wydać: ", self.lista[i])
                 temp_list = np.append(temp_list, self.lista[i])
                 temp = temp+ self.lista[i].get_value
             i=i+1
@@ -61,6 +61,18 @@ class Payment_Management:
     def get_payment(self) -> Decimal:
         """Zwraca łączną wartość wrzuconych monet"""
         return self.payment
+    
+    @property
+    def get_credit(self) -> Decimal:
+        """Zwraca wartość należnej zapłaty"""
+        return self.credit
+    
+    @property
+    def get_amount_to_pay(self) -> Decimal:
+        """Zwraca wartość należnej reszty"""
+        print("Zpałacono: ", self.payment)
+        print("Do Zapłaty: ", self.credit)
+        return self.payment - self.credit
     
     def clearList(self) -> None:
         """Usuwa przechowywane monety"""
