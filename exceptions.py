@@ -10,7 +10,8 @@ import tkinter as tk
 # In[1]:
 
 
-def popup_window(window, message):
+def popup_window(window, message) -> None:
+    """Tworzy okno typu pop-up dla customowych wyjątków"""
     window = tk.Toplevel()
     label = tk.Label(window, text=message)
     label.pack(fill='x', padx=50, pady=5)
@@ -51,15 +52,3 @@ class NotEnoughMoney(Exception):
         self.mess = "Nie wystarczająca ilość pieniędzy"
         popup_window(window, self.mess)
         super().__init__(self.mess)
-
-
-# In[ ]:
-
-
-class NoChangeNeeded(Exception):
-    """Informacja o braku reszty do wypłacenia"""
-    def __init__(self,window):
-        self.mess = "Brak reszty. Dziękujemy za zakupy"
-        popup_window(window, self.mess)
-        super().__init__(self.mess)
-
