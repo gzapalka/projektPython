@@ -25,9 +25,10 @@ def popup_window(window, message) -> None:
 
 class InvalidArgument(Exception):
     """Ilość monet musi być dodatnia i całkowita"""
-    def __init__(self,window):
+    def __init__(self,gui = None):
         self.mess = "Ilość monet musi być dodatnia i całkowita"
-        popup_window(window, self.mess)
+        if not(gui is None):
+            popup_window(gui.window, self.mess)
         super().__init__(self.mess)
         
 

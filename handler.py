@@ -27,6 +27,7 @@ class Handler(pm.Payment_Management):
         ticket_values = [3,4,5,2,3,4]
         self.ticket_values= [Decimal(ticket_values[i]).quantize(Decimal('0.00')) for i in range(len(ticket_values))]
         self.bought_ticket = []
+        self.added_coins = np.array([])
         
     def create_add_ticket(self, value: float, description: str) -> Callable:
         """Zwraca funkcję naliczającą opłatę za konkretny bilet"""
@@ -52,18 +53,20 @@ class Handler(pm.Payment_Management):
         self.payment = 0
         self.bought_ticket = []
         
-    def insert_coins(self, entry: list) -> list:
+    def insert_coins(self, entry: list, gui = None) -> list:
         """Dołącza wrzucone monety do zbioru"""
-        added = np.array([])
+        if not self.check_data(entry):
+            raise exceptions.InvalidArgument(gui)
+            
         for e in range(len(entry)): 
             for i in range((int)(entry[e])):
                 self.add_coin(self.expectedValue[e])
-                added = np.append(added, c.Coin(self.expectedValue[e]))
-        return added
+                self.added_coins = np.append(self.added_coins, c.Coin(self.expectedValue[e]))
+        return self.added_coins
                 
-    def manage_change(self, entry: list, gui) -> list:
+    def manage_change(self, entry: list, gui = None) -> list:
         """Zwraca resztę jeżeli jest potrzebna lub rzuca wyjątek jeżeli to niemożliwe"""
-        added = self.insert_coins(entry)
+        added = self.insert_coins(entry, gui)
         if self.get_amount_to_pay < 0:
             self.resign()
             raise exceptions.NotEnoughMoney(gui.window)
@@ -76,45 +79,10 @@ class Handler(pm.Payment_Management):
         if type(result) == type(False):  
             for coin in added:
                 self.return_coin(coin)
-            raise exceptions.CannotChange(gui.window, added)
+            return False, added
+#             raise exceptions.CannotChange(gui.window, added)
         else:
             return result
-# In[35]:
-
-
-# app = Ticket_Machine()
-# app.credit = 6
-# print(app.manageChange(["0","0","0","1","1","1","1","0","0","1","1","0"]))
-
-
-# In[36]:
-
-
-import unittest
-
-class TestPM(unittest.TestCase):
-    def setUp(self):
-        self.app = Ticket_Machine()
-        
-    def test_shouldRaiseNoChangeNeeded_whenPaidActualAmount(self) -> None:
-        self.app.credit = 5
-        self.assertRaises(exceptions.NoChangeNeeded, self.app.manageChange, ["0","0","0","1","0","0","0","0","0","0","0","0"])
-        
-    def test_shouldGiveCorrectChange_WhenPossible(self) -> None:
-        self.app.credit = 5
-        result = self.app.manageChange(["0","0","0","1","1","0","0","0","0","0","0","0"])
-        expected = np.array([c.Coin(Decimal(2).quantize(Decimal('0.00')))])
-
-        np.testing.assert_array_equal(result, expected)
-
-        
-    def test_shouldReturnAddedCoin_whenCannotChange(self) -> None:
-        self.app.credit = 6
-        print(self.app.manageChange(["0","0","0","1","1","1","1","0","0","1","1","0"]))
-        
-if __name__ == '__main__':
-    unittest.main()
-
 
 # In[ ]:
 

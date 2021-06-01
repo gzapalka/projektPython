@@ -31,6 +31,11 @@ class App(tk.Frame):
         self.credit_info.set(f'{credit_info}')
         if self.entries_enabled == False:
             self.switch_entries_enabale(True)
+            
+    def clear_entries(self)-> None:
+        for entry in self.entries:
+                entry.delete(0, tk.END)
+                entry.insert(1, "0")
         
     def switch_entries_enabale(self,display: bool)-> None:
         """Włącza możliwość wrzucania monet"""
@@ -60,6 +65,8 @@ class App(tk.Frame):
         
         self.create_entries()
         
+        button = tk.Button(self, text='Wrzuć monety', command=self.insert_coins)
+        button.grid(row=4, column=0, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S, padx=2, pady=2)
         button = tk.Button(self, text='Zakończ płatność', command=self.confirm_payment)
         button.grid(row=5, column=0, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S, padx=2, pady=2)
         button = tk.Button(self, text='Zrezygnuj', command=self.resign)
@@ -83,6 +90,18 @@ class App(tk.Frame):
 
         button_close = tk.Button(self.window, text="OK", command=self.window.destroy)
         button_close.pack(fill='x')
+        
+    def insert_coins(self) -> None:
+        entry_data = self.read_data_from_entries()
+#         if self.handler.check_data(entry_data):
+        try:
+            self.handler.insert_coins(entry_data)
+            self.clear_entries()
+        except exceptions.InvalidArgument:
+            self.resing()
+#         else:
+#             self.resign()
+#             raise exceptions.InvalidArgument(self.window)
 
     def confirm_payment(self) -> None:
         """Rozlicza płatność"""
@@ -90,13 +109,15 @@ class App(tk.Frame):
         if self.handler.check_data(entry_data):
             try:
                 change = self.handler.manage_change(entry_data, self)
+                if type(change) == tuple:
+                    raise exceptions.CannotChange(self, change)
                 self.popup_window("Dziękujemy za zakupy!\n\n Twoja reszta: " +
                                   (str)(change) +"\nKupiono: " + (str)(self.handler.bought_ticket))
             except (exceptions.NotEnoughMoney, exceptions.CannotChange):
                 pass
         else:
             self.resign()
-            raise exceptions.InvalidArgument(self.window)
+            raise exceptions.InvalidArgument(self)
         self.resign()
         
         
