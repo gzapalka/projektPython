@@ -1,4 +1,7 @@
 Automat biletowy MPK 
+
+![Capture](https://user-images.githubusercontent.com/71458539/120379977-d4b60300-c320-11eb-853b-ab6a05d2b7bd.PNG)
+
 1. Opis zadania:
 Automat przechowuje informacje o monetach/banknotach znajdujqcych sip w nim (1, 2, 5, 10, 20, 50gr, 1, 2, 5, 10, 20, 50zt) [dziedziczenie: mozna napisa6 uniwersalnq klase PrzechowywaczMonet po kt6rej dziedziczy6 bedzie automat]. Okno z listą biletów w różnych cenach (jako przyciski). 
 Wymagane bilety: 20-minutowy, 40-minutowy, 60-minutowy w wariantach normalnym i ulgowym. 
