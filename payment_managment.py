@@ -12,9 +12,8 @@ class Payment_Management:
     """Klasa obsługująca logikę zarządzania pieniędzmi"""
     
     def __init__(self) -> None:
-        
-        self.numberText: tk.StringVar
         """Zwraca obiekt typu Payment_Management"""
+        self.numberText: tk.StringVar
         expectedValue = [50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
         self.expectedValue= [Decimal(expectedValue[i]).quantize(Decimal('0.00')) for i in range(len(expectedValue))]
         self.lista=np.array([])
@@ -70,10 +69,6 @@ class Payment_Management:
     def get_amount_to_pay(self) -> Decimal:
         """Zwraca wartość należnej reszty"""
         return self.payment - self.credit
-    
-    def clearList(self) -> None:
-        """Usuwa przechowywane monety"""
-        self.lista=np.array([])
         
 if __name__ == '__main__':
     pass

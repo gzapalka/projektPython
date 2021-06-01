@@ -39,7 +39,7 @@ class InvalidArgument(Exception):
 class CannotChange(Exception):
     """Nie można wydać reszty"""
     def __init__(self,window, added):
-        self.mess = "Nie można wydać reszty. Tylko odliczona kwota \n\n Zwracam: " + (str)(added)
+        self.mess = "Nie można wydać reszty. Tylko odliczona kwota \n\n Zwracam: " + (str)(added[1])
         popup_window(window, self.mess)
         super().__init__(self.mess)
 

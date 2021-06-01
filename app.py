@@ -93,15 +93,11 @@ class App(tk.Frame):
         
     def insert_coins(self) -> None:
         entry_data = self.read_data_from_entries()
-#         if self.handler.check_data(entry_data):
         try:
             self.handler.insert_coins(entry_data)
             self.clear_entries()
         except exceptions.InvalidArgument:
             self.resing()
-#         else:
-#             self.resign()
-#             raise exceptions.InvalidArgument(self.window)
 
     def confirm_payment(self) -> None:
         """Rozlicza płatność"""
@@ -118,14 +114,17 @@ class App(tk.Frame):
         else:
             self.resign()
             raise exceptions.InvalidArgument(self)
-        self.resign()
+        self.resign(True)
         
         
-    def resign(self) -> None:
+    def resign(self, correct_transaction = False) -> None:
         """Usuwa dane tranzakcji"""
         self.handler.resign()
         self.update_info()
         self.switch_entries_enabale(False)
+        if not correct_transaction:
+            self.popup_window("Zwracam monety: " + (str)(self.handler.added_coins))
+        self.handler.added_coins = []
     
     def read_data_from_entries(self) -> list:
         """Czyta ilość wrzuconych monet"""

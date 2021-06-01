@@ -33,15 +33,8 @@ class Coin:
     def __eq__(self, other):
         return self.get_value==other.get_value
     
-
-class TestCoin(unittest.TestCase):
-    def test_returnValue(self) -> None:
-        c = Coin(5)
-        print(c.get_value!=5)
-        self.assertFalse(c.get_value!=5)
-    
 if __name__ == '__main__':
-    unittest.main()
+    pass
 else:
     print('Coin imported succenfully')
 

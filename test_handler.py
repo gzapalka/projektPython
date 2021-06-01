@@ -16,34 +16,36 @@ class Test_Handler(unittest.TestCase):
     def setUp(self):
         self.app = handler.Handler()
         
-#     def test_shouldRaiseNoChangeNeeded_whenPaidActualAmount(self) -> None:
-#         self.app.credit = 5
-#         self.assertRaises(exceptions.NoChangeNeeded, self.app.manage_change, ["0","0","0","1","0","0","0","0","0","0","0","0"], app.App())
-        
     def test_shouldGiveCorrectChange_WhenPossible(self) -> None:
-        self.app.credit = 5
+        fun = self.app.create_add_ticket(5, "normal-")
+        fun()
         result = self.app.manage_change(["0","0","0","1","1","0","0","0","0","0","0","0"])
         expected = np.array([c.Coin(Decimal(2).quantize(Decimal('0.00')))])
-
         np.testing.assert_array_equal(result, expected)
         
     def test_shouldNotGiveChange_whenCreditEqualPayment(self) -> None:
-        self.app.credit = 5
+        fun2 = self.app.create_add_ticket(5, "normal-")
+        fun2()
         result = self.app.manage_change(["0","0","0","1","0","0","0","0","0","0","0","0"])
         expected = np.array([])
 
         np.testing.assert_array_equal(result, expected)
         
     def test_shouldReturnAddedCoin_whenCannotChange(self) -> None:
-        self.app.credit = 6
+        fun = self.app.create_add_ticket(6, "normal-")
+        fun()
         result = self.app.manage_change(["0","0","0","1","1","0","0","0","0","1","1","0"])
         expected = np.array([c.Coin(Decimal(5).quantize(Decimal('0.00'))),c.Coin(Decimal(2).quantize(Decimal('0.00'))),c.Coin(Decimal(0.05).quantize(Decimal('0.00'))),c.Coin(Decimal(0.02).quantize(Decimal('0.00')))])
         
+        self.assertFalse(result[0])
         np.testing.assert_array_equal(result[1], expected)
         
     def test_shouldCalculateAmountToPay_Correctly(self)->None:
-        self.app.credit = 1
-        result = self.app.manage_change(["0","0","0","0","0","0","0","0","0","0","0","100"])
+        fun = self.app.create_add_ticket(1, "normal-")
+        fun()
+        for i in range(100):
+            self.app.insert_coins(["0","0","0","0","0","0","0","0","0","0","0","1"])
+        result = self.app.manage_change(["0","0","0","0","0","0","0","0","0","0","0","0"])
         expected = np.array([])
 
         np.testing.assert_array_equal(result, expected)
@@ -59,9 +61,9 @@ class Test_Handler(unittest.TestCase):
     def test_coinsShouldNotDisappearAfterAddTicket(self) -> None:
         fun1 = self.app.create_add_ticket(3, "reduced-")
         fun1()
-        self.app.insert_coins(["0","0","0","0","1","1","0","0","0","0","0","0"])
+        self.app.insert_coins(["0","0","0","0","0","1","0","0","0","0","0","0"])
         fun1()
-        result = self.app.manage_change(["0","0","0","0","1","1","0","0","0","0","0","0"])
+        result = self.app.manage_change(["0","0","0","1","0","0","0","0","0","0","0","0"])
         expected = np.array([])
 
         np.testing.assert_array_equal(result, expected)
