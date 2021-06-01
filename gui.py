@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[4]:
 
 
 import tkinter as tk
@@ -23,9 +23,9 @@ class GUI:
         end = tk.Button(text = "Zrezygnuj", width=7,height=1,bg="grey",fg="white", bd=5,
                         command = lambda:[self.tm.resign(), self.update_credit_status(), self.update_payment_status()])
         end.place(x = 350, y = 10)
-        self.printTicketLayout()  
+        self.printTicketLayout()
+        self.e = [tk.Entry(self.window,width=5) for i in range(12)]
         self.window.mainloop()
-        
    
     def update_credit_status(self) -> None:
         """Wyświetla obecne zadłużenie"""
@@ -100,7 +100,7 @@ class GUI:
             
     
     def placeEntryWidget(self):
-        e = [tk.Entry(self.window,width=5) for i in range(12)]
+
         e[0].place(x=90, y=230)
         e[1].place(x=190, y=230)
         e[2].place(x=290, y=230)
@@ -113,7 +113,10 @@ class GUI:
         e[9].place(x=90, y=350)
         e[10].place(x=190, y=350)
         e[11].place(x=290, y=350)
-        self.e = e
+#             self.e = e
+        
+#         except TclError:
+#             pass
         
     def printPaymentLayout(self):
         self.placeButtons()
@@ -124,6 +127,12 @@ if __name__ == '__main__':
     pass
 else:
     print('GUI imported succesfully')
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:

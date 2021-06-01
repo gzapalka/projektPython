@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 from decimal import *
@@ -9,9 +9,9 @@ import unittest
 
 class Coin:
     """Klasa rezprezentująca monety"""
-    def __init__(self, value: Decimal):
+    def __init__(self, value: float):
         """Tworzy nowy obiekt typu Coin"""
-        self._value = value
+        self._value = Decimal(round(value, 2))
         
     @property
     def get_value(self) -> Decimal:
@@ -30,6 +30,9 @@ class Coin:
     def __repr__(self):
         return (str)(self.get_value)
     
+    def __eq__(self, other):
+        return self.get_value==other.get_value
+    
 
 class TestCoin(unittest.TestCase):
     def test_returnValue(self) -> None:
@@ -40,7 +43,7 @@ class TestCoin(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 else:
-    print('Coin imported succesfully')
+    print('Coin imported succenfully')
 
 
 # In[ ]:

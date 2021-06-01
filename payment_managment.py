@@ -12,6 +12,8 @@ class Payment_Management:
     """Klasa obsługująca logikę zarządzania pieniędzmi"""
     
     def __init__(self) -> None:
+        
+        self.numberText: tk.StringVar
         """Zwraca obiekt typu Payment_Management"""
         expectedValue = [50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
         self.expectedValue= [Decimal(expectedValue[i]).quantize(Decimal('0.00')) for i in range(len(expectedValue))]
@@ -41,11 +43,8 @@ class Payment_Management:
         temp = 0
         temp_list = np.array([])
         i=0
-        print("Muszę wydać: ", amount)
-        print("Mam do dyspozycji: ", self.lista)
         while amount > temp and i < len(self.lista):
             if temp + self.lista[i].get_value <= amount:
-                print("Mogę wydać: ", self.lista[i])
                 temp_list = np.append(temp_list, self.lista[i])
                 temp = temp+ self.lista[i].get_value
             i=i+1
@@ -70,8 +69,6 @@ class Payment_Management:
     @property
     def get_amount_to_pay(self) -> Decimal:
         """Zwraca wartość należnej reszty"""
-        print("Zpałacono: ", self.payment)
-        print("Do Zapłaty: ", self.credit)
         return self.payment - self.credit
     
     def clearList(self) -> None:
